@@ -140,19 +140,15 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     const typeChanged = newType !== oldType
 
     if (accountChanged || amountChanged || typeChanged) {
-      accountStore.adjustBalance(oldAccountId, oldAmount, oldType !== 'income')
+      // 第一步：撤销旧交易对旧账户的影响
+      // 旧类型是收入 → 之前增加了余额 → 现在要减少
+      // 旧类型是支出 → 之前减少了余额 → 现在要增加
+      accountStore.adjustBalance(oldAccountId, oldAmount, oldType === 'expense')
 
-      if (accountChanged) {
-        accountStore.adjustBalance(newAccountId, newAmount, newType === 'income')
-      } else {
-        const delta = newAmount - oldAmount
-        if (typeChanged) {
-          accountStore.adjustBalance(newAccountId, oldAmount, oldType !== 'income')
-          accountStore.adjustBalance(newAccountId, newAmount, newType === 'income')
-        } else if (delta !== 0) {
-          accountStore.adjustBalance(newAccountId, Math.abs(delta), newType === 'income' ? delta > 0 : delta < 0)
-        }
-      }
+      // 第二步：应用新交易对新账户的影响
+      // 新类型是收入 → 增加余额
+      // 新类型是支出 → 减少余额
+      accountStore.adjustBalance(newAccountId, newAmount, newType === 'income')
     }
 
     const updated = get().transactions.map((t) =>

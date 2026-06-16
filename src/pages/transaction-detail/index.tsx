@@ -13,7 +13,7 @@ const TransactionDetailPage: React.FC = () => {
   const router = useRouter()
   const id = router.params.id as string
 
-  const getTransactionById = useTransactionStore((s) => s.getTransactionById)
+  const transactions = useTransactionStore((s) => s.transactions)
   const updateTransaction = useTransactionStore((s) => s.updateTransaction)
   const deleteTransaction = useTransactionStore((s) => s.deleteTransaction)
 
@@ -35,8 +35,17 @@ const TransactionDetailPage: React.FC = () => {
   const [editMerchant, setEditMerchant] = useState('')
   const [editNote, setEditNote] = useState('')
   const [editType, setEditType] = useState<TransactionType>('expense')
+  const [editSnapshot, setEditSnapshot] = useState<{
+    amount: string
+    accountId: string
+    categoryId: string
+    date: string
+    merchant: string
+    note: string
+    type: TransactionType
+  } | null>(null)
 
-  const transaction = useMemo(() => getTransactionById(id), [id, getTransactionById])
+  const transaction = useMemo(() => transactions.find((t) => t.id === id), [id, transactions])
 
   useDidShow(() => {
     loadCategories()
@@ -61,17 +70,37 @@ const TransactionDetailPage: React.FC = () => {
   const categoryIds = categories.filter((c) => c.type === editType).map((c) => c.id)
 
   const handleEnterEdit = () => {
-    setEditAmount(transaction.amount.toString())
-    setEditAccountId(transaction.accountId)
-    setEditCategoryId(transaction.categoryId)
-    setEditDate(transaction.date)
-    setEditMerchant(transaction.merchant || '')
-    setEditNote(transaction.note || '')
-    setEditType(transaction.type)
+    const snapshot = {
+      amount: transaction.amount.toString(),
+      accountId: transaction.accountId,
+      categoryId: transaction.categoryId,
+      date: transaction.date,
+      merchant: transaction.merchant || '',
+      note: transaction.note || '',
+      type: transaction.type
+    }
+    setEditSnapshot(snapshot)
+    setEditAmount(snapshot.amount)
+    setEditAccountId(snapshot.accountId)
+    setEditCategoryId(snapshot.categoryId)
+    setEditDate(snapshot.date)
+    setEditMerchant(snapshot.merchant)
+    setEditNote(snapshot.note)
+    setEditType(snapshot.type)
     setIsEditing(true)
   }
 
   const handleCancelEdit = () => {
+    if (editSnapshot) {
+      setEditAmount(editSnapshot.amount)
+      setEditAccountId(editSnapshot.accountId)
+      setEditCategoryId(editSnapshot.categoryId)
+      setEditDate(editSnapshot.date)
+      setEditMerchant(editSnapshot.merchant)
+      setEditNote(editSnapshot.note)
+      setEditType(editSnapshot.type)
+      setEditSnapshot(null)
+    }
     setIsEditing(false)
   }
 
