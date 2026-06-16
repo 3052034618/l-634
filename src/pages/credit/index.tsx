@@ -24,15 +24,24 @@ const CreditPage: React.FC = () => {
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null)
 
   useDidShow(() => {
-    loadAccounts()
-    loadCredit()
-    setTimeout(() => {
-      const credits = accounts.filter((a) => a.type === 'credit')
-      if (credits.length > 0 && !selectedAccountId) {
-        setSelectedAccountId(credits[0].id)
-      }
-      checkReminders()
-    }, 300)
+    Promise.all([
+      new Promise<void>((resolve) => {
+        loadAccounts()
+        setTimeout(resolve, 50)
+      }),
+      new Promise<void>((resolve) => {
+        loadCredit()
+        setTimeout(resolve, 50)
+      })
+    ]).then(() => {
+      setTimeout(() => {
+        const credits = useAccountStore.getState().accounts.filter((a) => a.type === 'credit')
+        if (credits.length > 0 && !selectedAccountId) {
+          setSelectedAccountId(credits[0].id)
+        }
+        checkReminders()
+      }, 100)
+    })
   })
 
   const creditAccounts = useMemo(

@@ -28,6 +28,7 @@ export interface CreditReminder {
   id: string
   accountId: string
   billId: string
+  billingMonth?: string
   type: 'billing' | 'repayment' | 'overdue'
   message: string
   triggeredAt: string

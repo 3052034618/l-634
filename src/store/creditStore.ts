@@ -3,8 +3,10 @@ import dayjs from 'dayjs'
 import type { CreditBill, CreditBillItem, CreditReminder } from '@/types'
 import { getStorageSync, setStorageSync } from '@/utils/storage'
 import { generateId } from '@/utils/id'
+import { classifyTransaction } from '@/utils/classifier'
 import { useAccountStore } from './accountStore'
 import { useTransactionStore } from './transactionStore'
+import { useAppStore } from './appStore'
 
 const BILL_KEY = 'credit_bills'
 const REMINDER_KEY = 'credit_reminders'
@@ -70,6 +72,36 @@ export const useCreditStore = create<CreditState>((set, get) => ({
   },
 
   createBill: (data) => {
+    const existing = get().bills.find(
+      (b) => b.accountId === data.accountId && b.billingMonth === data.billingMonth
+    )
+    if (existing) {
+      console.log('[CreditStore] Bill already exists for this month, updating items')
+      const updatedBills = get().bills.map((b) =>
+        b.id === existing.id
+          ? {
+              ...b,
+              totalAmount: data.totalAmount,
+              minPayment: data.totalAmount * 0.1,
+              billingDate: data.billingDate,
+              dueDate: data.dueDate,
+              items: data.items || [],
+              status: 'pending' as const
+            }
+          : b
+      )
+      setStorageSync(BILL_KEY, updatedBills)
+      set({ bills: updatedBills })
+
+      const accountStore = useAccountStore.getState()
+      accountStore.updateAccount(data.accountId, {
+        currentBill: data.totalAmount,
+        minPayment: data.totalAmount * 0.1
+      })
+
+      return updatedBills.find((b) => b.id === existing.id)!
+    }
+
     const newBill: CreditBill = {
       id: generateId(),
       accountId: data.accountId,
@@ -201,7 +233,9 @@ export const useCreditStore = create<CreditState>((set, get) => ({
   checkReminders: () => {
     const newReminders: CreditReminder[] = []
     const accounts = useAccountStore.getState().accounts.filter((a) => a.type === 'credit')
-    const existingIds = new Set(
+    const currentMonth = dayjs().format('YYYY-MM')
+
+    const existingKeys = new Set(
       get().reminders.map((r) => `${r.accountId}_${r.billingMonth || ''}_${r.type}`)
     )
 
@@ -214,31 +248,40 @@ export const useCreditStore = create<CreditState>((set, get) => ({
         const today = dayjs()
         const daysUntilDue = dueDate.diff(today, 'day')
         const lateFee = get().calculateLateFee(pendingBill.id)
+        const billingMonth = pendingBill.billingMonth
 
-        if (lateFee > 0 && !existingIds.has(`${acc.id}_${pendingBill.billingMonth}_overdue`)) {
-          newReminders.push({
-            id: generateId(),
-            accountId: acc.id,
-            billId: pendingBill.id,
-            type: 'overdue',
-            message: `${acc.name}已逾期${Math.abs(daysUntilDue)}天，滞纳金¥${lateFee.toFixed(2)}`,
-            triggeredAt: dayjs().toISOString(),
-            read: false
-          })
-        } else if (
-          daysUntilDue >= 0 &&
-          daysUntilDue <= 7 &&
-          !existingIds.has(`${acc.id}_${pendingBill.billingMonth}_repayment`)
-        ) {
-          newReminders.push({
-            id: generateId(),
-            accountId: acc.id,
-            billId: pendingBill.id,
-            type: 'repayment',
-            message: `${acc.name}还有${daysUntilDue}天到期，应还¥${pendingBill.totalAmount.toFixed(2)}`,
-            triggeredAt: dayjs().toISOString(),
-            read: false
-          })
+        const overdueKey = `${acc.id}_${billingMonth}_overdue`
+        const repaymentKey = `${acc.id}_${billingMonth}_repayment`
+
+        if (lateFee > 0) {
+          if (!existingKeys.has(overdueKey)) {
+            newReminders.push({
+              id: generateId(),
+              accountId: acc.id,
+              billId: pendingBill.id,
+              billingMonth,
+              type: 'overdue',
+              message: `${acc.name}已逾期${Math.abs(daysUntilDue)}天，滞纳金¥${lateFee.toFixed(2)}`,
+              triggeredAt: dayjs().toISOString(),
+              read: false
+            })
+            existingKeys.add(overdueKey)
+          }
+          existingKeys.delete(repaymentKey)
+        } else if (daysUntilDue >= 0 && daysUntilDue <= 7) {
+          if (!existingKeys.has(repaymentKey) && !existingKeys.has(overdueKey)) {
+            newReminders.push({
+              id: generateId(),
+              accountId: acc.id,
+              billId: pendingBill.id,
+              billingMonth,
+              type: 'repayment',
+              message: `${acc.name}还有${daysUntilDue}天到期，应还¥${pendingBill.totalAmount.toFixed(2)}`,
+              triggeredAt: dayjs().toISOString(),
+              read: false
+            })
+            existingKeys.add(repaymentKey)
+          }
         }
       }
     })
@@ -247,6 +290,7 @@ export const useCreditStore = create<CreditState>((set, get) => ({
       const updated = [...newReminders, ...get().reminders]
       setStorageSync(REMINDER_KEY, updated)
       set({ reminders: updated })
+      console.log('[CreditStore] Generated', newReminders.length, 'new credit reminders')
     }
 
     return newReminders

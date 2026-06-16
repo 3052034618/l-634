@@ -126,13 +126,33 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
       }
     }
 
-    if (data.amount !== undefined && (data.amount !== tx.amount || data.type !== tx.type)) {
-      const accountStore = useAccountStore.getState()
-      accountStore.adjustBalance(tx.accountId, tx.amount, tx.type !== 'income')
-      const newAccountId = data.accountId || tx.accountId
-      const newType = data.type || tx.type
-      const newAmount = data.amount || tx.amount
-      accountStore.adjustBalance(newAccountId, newAmount, newType === 'income')
+    const accountStore = useAccountStore.getState()
+    const oldAccountId = tx.accountId
+    const oldAmount = tx.amount
+    const oldType = tx.type
+
+    const newAccountId = data.accountId || oldAccountId
+    const newAmount = data.amount !== undefined ? data.amount : oldAmount
+    const newType = data.type || oldType
+
+    const accountChanged = newAccountId !== oldAccountId
+    const amountChanged = newAmount !== oldAmount
+    const typeChanged = newType !== oldType
+
+    if (accountChanged || amountChanged || typeChanged) {
+      accountStore.adjustBalance(oldAccountId, oldAmount, oldType !== 'income')
+
+      if (accountChanged) {
+        accountStore.adjustBalance(newAccountId, newAmount, newType === 'income')
+      } else {
+        const delta = newAmount - oldAmount
+        if (typeChanged) {
+          accountStore.adjustBalance(newAccountId, oldAmount, oldType !== 'income')
+          accountStore.adjustBalance(newAccountId, newAmount, newType === 'income')
+        } else if (delta !== 0) {
+          accountStore.adjustBalance(newAccountId, Math.abs(delta), newType === 'income' ? delta > 0 : delta < 0)
+        }
+      }
     }
 
     const updated = get().transactions.map((t) =>

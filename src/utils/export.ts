@@ -38,6 +38,12 @@ export const exportToCSV = async (
     return false
   }
 
+  const validTransactions = transactions.filter((t) => t.amount > 0)
+  if (validTransactions.length === 0) {
+    Taro.showToast({ title: '暂无有效数据可导出', icon: 'none' })
+    return false
+  }
+
   try {
     const headers = ['日期', '类型', '金额', '分类', '账户', '商户', '描述', '备注']
     const rows = transactions.map((t) => [
@@ -107,6 +113,14 @@ export const exportSummaryToText = async (
 ): Promise<boolean> => {
   try {
     const monthLabel = dayjs(month + '-01').format('YYYY年M月')
+    
+    const hasData = summary.totalIncome > 0 || summary.totalExpense > 0
+    const hasCategories = summary.byCategory && summary.byCategory.size > 0
+
+    if (!hasData && !hasCategories) {
+      Taro.showToast({ title: '暂无数据可导出', icon: 'none' })
+      return false
+    }
     
     let text = `====================================\n`
     text += `           ${monthLabel}财务报告\n`

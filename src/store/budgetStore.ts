@@ -96,8 +96,11 @@ export const useBudgetStore = create<BudgetState>((set, get) => ({
 
     const txStore = useTransactionStore.getState()
     const newAlerts: BudgetAlert[] = []
+    const currentMonthAlerts = get().alerts.filter((a) => a.month === currentMonth)
+    const validKeys = new Set<string>()
+
     const existingKeys = new Set(
-      get().alerts.map((a) => `${a.categoryId}_${a.type}_${currentMonth}`)
+      currentMonthAlerts.map((a) => `${a.categoryId}_${a.type}_${currentMonth}`)
     )
 
     budget.categoryBudgets.forEach((cb) => {
@@ -108,31 +111,36 @@ export const useBudgetStore = create<BudgetState>((set, get) => ({
       const overKey = `${cb.categoryId}_overdue_${currentMonth}`
       const warnKey = `${cb.categoryId}_warning_${currentMonth}`
 
-      if (percent >= 1 && !existingKeys.has(overKey)) {
-        newAlerts.push({
-          id: generateId(),
-          type: 'overdue',
-          categoryId: cb.categoryId,
-          categoryName: cb.categoryName,
-          month: currentMonth,
-          message: `${cb.categoryName}支出已超支 ¥${(spent - cb.limit).toFixed(2)}！`,
-          triggeredAt: dayjs().toISOString(),
-          read: false
-        })
-        existingKeys.add(overKey)
-        existingKeys.delete(warnKey)
-      } else if (percent >= threshold && percent < 1 && !existingKeys.has(warnKey) && !existingKeys.has(overKey)) {
-        newAlerts.push({
-          id: generateId(),
-          type: 'warning',
-          categoryId: cb.categoryId,
-          categoryName: cb.categoryName,
-          month: currentMonth,
-          message: `${cb.categoryName}已使用预算的 ${(percent * 100).toFixed(0)}%，请注意控制`,
-          triggeredAt: dayjs().toISOString(),
-          read: false
-        })
-        existingKeys.add(warnKey)
+      if (percent >= 1) {
+        validKeys.add(overKey)
+        if (!existingKeys.has(overKey)) {
+          newAlerts.push({
+            id: generateId(),
+            type: 'overdue',
+            categoryId: cb.categoryId,
+            categoryName: cb.categoryName,
+            month: currentMonth,
+            message: `${cb.categoryName}支出已超支 ¥${(spent - cb.limit).toFixed(2)}！`,
+            triggeredAt: dayjs().toISOString(),
+            read: false
+          })
+          existingKeys.add(overKey)
+        }
+      } else if (percent >= threshold && percent < 1) {
+        validKeys.add(warnKey)
+        if (!existingKeys.has(warnKey) && !existingKeys.has(overKey)) {
+          newAlerts.push({
+            id: generateId(),
+            type: 'warning',
+            categoryId: cb.categoryId,
+            categoryName: cb.categoryName,
+            month: currentMonth,
+            message: `${cb.categoryName}已使用预算的 ${(percent * 100).toFixed(0)}%，请注意控制`,
+            triggeredAt: dayjs().toISOString(),
+            read: false
+          })
+          existingKeys.add(warnKey)
+        }
       }
     })
 
@@ -140,38 +148,55 @@ export const useBudgetStore = create<BudgetState>((set, get) => ({
     const totalOverKey = `_total_overdue_${currentMonth}`
     const totalWarnKey = `_total_warning_${currentMonth}`
 
-    if (totalProgress.percent >= 1 && !existingKeys.has(totalOverKey)) {
-      newAlerts.push({
-        id: generateId(),
-        type: 'overdue',
-        categoryId: '_total',
-        categoryName: '月度总预算',
-        month: currentMonth,
-        message: `本月总支出已超预算 ¥${(totalProgress.spent - totalProgress.limit).toFixed(2)}！`,
-        triggeredAt: dayjs().toISOString(),
-        read: false
-      })
-      existingKeys.add(totalOverKey)
-    } else if (totalProgress.percent >= 0.8 && totalProgress.percent < 1 && !existingKeys.has(totalWarnKey) && !existingKeys.has(totalOverKey)) {
-      newAlerts.push({
-        id: generateId(),
-        type: 'warning',
-        categoryId: '_total',
-        categoryName: '月度总预算',
-        month: currentMonth,
-        message: `本月已使用预算的 ${(totalProgress.percent * 100).toFixed(0)}%，请注意控制`,
-        triggeredAt: dayjs().toISOString(),
-        read: false
-      })
-      existingKeys.add(totalWarnKey)
+    if (totalProgress.percent >= 1) {
+      validKeys.add(totalOverKey)
+      if (!existingKeys.has(totalOverKey)) {
+        newAlerts.push({
+          id: generateId(),
+          type: 'overdue',
+          categoryId: '_total',
+          categoryName: '月度总预算',
+          month: currentMonth,
+          message: `本月总支出已超预算 ¥${(totalProgress.spent - totalProgress.limit).toFixed(2)}！`,
+          triggeredAt: dayjs().toISOString(),
+          read: false
+        })
+        existingKeys.add(totalOverKey)
+      }
+    } else if (totalProgress.percent >= 0.8 && totalProgress.percent < 1) {
+      validKeys.add(totalWarnKey)
+      if (!existingKeys.has(totalWarnKey) && !existingKeys.has(totalOverKey)) {
+        newAlerts.push({
+          id: generateId(),
+          type: 'warning',
+          categoryId: '_total',
+          categoryName: '月度总预算',
+          month: currentMonth,
+          message: `本月已使用预算的 ${(totalProgress.percent * 100).toFixed(0)}%，请注意控制`,
+          triggeredAt: dayjs().toISOString(),
+          read: false
+        })
+        existingKeys.add(totalWarnKey)
+      }
     }
 
+    const otherMonthAlerts = get().alerts.filter((a) => a.month !== currentMonth)
+    const filteredCurrentAlerts = currentMonthAlerts.filter((a) =>
+      validKeys.has(`${a.categoryId}_${a.type}_${currentMonth}`)
+    )
+
+    let finalAlerts = [...otherMonthAlerts, ...filteredCurrentAlerts]
     if (newAlerts.length > 0) {
-      const updated = [...newAlerts, ...get().alerts]
-      setStorageSync(ALERT_KEY, updated)
-      set({ alerts: updated })
+      finalAlerts = [...newAlerts, ...finalAlerts]
       console.log('[BudgetStore] Generated', newAlerts.length, 'new alerts')
     }
+
+    if (filteredCurrentAlerts.length !== currentMonthAlerts.length) {
+      console.log('[BudgetStore] Removed', currentMonthAlerts.length - filteredCurrentAlerts.length, 'invalid alerts')
+    }
+
+    setStorageSync(ALERT_KEY, finalAlerts)
+    set({ alerts: finalAlerts })
 
     return newAlerts
   },
