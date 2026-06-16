@@ -25,4 +25,27 @@ export interface Transaction {
   updatedAt: string
   isAutoClassified: boolean
   adjusted?: boolean
+  transferToAccountId?: string
+}
+
+export type BalanceChangeReason =
+  | 'add_transaction'
+  | 'update_transaction'
+  | 'delete_transaction'
+  | 'transfer_out'
+  | 'transfer_in'
+  | 'mark_paid'
+  | 'manual_adjust'
+
+export interface AccountBalanceLog {
+  id: string
+  accountId: string
+  relatedTransactionId?: string
+  relatedBillId?: string
+  reason: BalanceChangeReason
+  oldBalance: number
+  newBalance: number
+  delta: number
+  description: string
+  createdAt: string
 }

@@ -26,6 +26,53 @@
   }
 }
 
+.filterPanel {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-sm;
+  align-items: center;
+}
+
+.filterField {
+  flex: 1;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: $shadow-card;
+}
+
+.filterIcon {
+  font-size: 24rpx;
+  margin-right: $spacing-xs;
+}
+
+.filterText {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.pickerArrow {
+  color: $color-text-tertiary;
+  font-size: $font-size-lg;
+  margin-left: $spacing-xs;
+}
+
+.resetBtn {
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  border: 2rpx solid $color-border;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  box-shadow: $shadow-card;
+  flex-shrink: 0;
+}
+
 .filterRow {
   display: flex;
   gap: $spacing-sm;
@@ -57,11 +104,20 @@
   margin-bottom: $spacing-md;
   box-shadow: $shadow-card;
   display: flex;
+  align-items: center;
   justify-content: space-around;
 }
 
 .summaryItem {
   text-align: center;
+  flex: 1;
+}
+
+.summaryDivider {
+  width: 2rpx;
+  height: 48rpx;
+  background: $color-border-light;
+  margin: 0 $spacing-sm;
 }
 
 .summaryLabel {
@@ -113,10 +169,18 @@
   gap: $spacing-xs;
 }
 
-.fab {
+.fabGroup {
   position: fixed;
   right: $page-padding;
   bottom: 160rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: $spacing-md;
+  z-index: 100;
+}
+
+.fab {
   width: 112rpx;
   height: 112rpx;
   border-radius: 50%;
@@ -125,7 +189,23 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 8rpx 24rpx rgba(16, 185, 129, 0.4);
-  z-index: 100;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.fabSecondary {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: $shadow-card;
+  border: 2rpx solid $color-border-light;
   transition: all $transition-base;
 
   &:active {
@@ -136,6 +216,12 @@
 .fabIcon {
   font-size: 48rpx;
   color: $color-text-white;
+}
+
+.fabIconSmall {
+  font-size: 32rpx;
+  color: $color-primary;
+  font-weight: $font-weight-bold;
 }
 
 .searchBar {
@@ -157,4 +243,8 @@
 .searchIcon {
   margin-right: $spacing-sm;
   font-size: 28rpx;
+}
+
+.scrollContent {
+  padding-bottom: 300rpx;
 }

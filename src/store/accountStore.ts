@@ -1,9 +1,10 @@
 import { create } from 'zustand'
 import dayjs from 'dayjs'
-import type { Account, AccountType } from '@/types'
+import type { Account, AccountType, BalanceChangeReason } from '@/types'
 import { mockAccounts } from '@/data/mockData'
 import { getStorageSync, setStorageSync } from '@/utils/storage'
 import { generateId } from '@/utils/id'
+import { useBalanceLogStore } from './balanceLogStore'
 
 const ACC_KEY = 'accounts'
 
@@ -14,7 +15,18 @@ interface AccountState {
   addAccount: (data: Partial<Account> & { name: string; type: AccountType; balance: number }) => Account
   updateAccount: (id: string, data: Partial<Account>) => void
   deleteAccount: (id: string) => void
-  adjustBalance: (id: string, amount: number, isAdd: boolean) => void
+  adjustBalance: (
+    id: string,
+    amount: number,
+    isAdd: boolean,
+    logOptions?: {
+      log: boolean
+      relatedTransactionId?: string
+      relatedBillId?: string
+      reason: BalanceChangeReason
+      description?: string
+    }
+  ) => { oldBalance: number; newBalance: number; delta: number }
   getAccountById: (id: string) => Account | undefined
   getTotalAssets: () => number
   getTotalLiabilities: () => number
@@ -33,6 +45,7 @@ export const useAccountStore = create<AccountState>((set, get) => ({
       setStorageSync(ACC_KEY, mockAccounts)
       set({ accounts: mockAccounts, loaded: true })
     }
+    useBalanceLogStore.getState().loadLogs()
     console.log('[AccountStore] Loaded', get().accounts.length, 'accounts')
   },
 
@@ -86,14 +99,35 @@ export const useAccountStore = create<AccountState>((set, get) => ({
     set({ accounts: updated })
   },
 
-  adjustBalance: (id, amount, isAdd) => {
+  adjustBalance: (id, amount, isAdd, logOptions) => {
+    const account = get().accounts.find((a) => a.id === id)
+    const oldBalance = account?.balance || 0
+    const delta = isAdd ? amount : -amount
+    const newBalance = oldBalance + delta
+
     const updated = get().accounts.map((a) => {
       if (a.id !== id) return a
-      const newBalance = isAdd ? a.balance + amount : a.balance - amount
       return { ...a, balance: newBalance, updatedAt: dayjs().toISOString() }
     })
     setStorageSync(ACC_KEY, updated)
     set({ accounts: updated })
+
+    if (logOptions && logOptions.log) {
+      useBalanceLogStore.getState().addLog({
+        accountId: id,
+        relatedTransactionId: logOptions.relatedTransactionId,
+        relatedBillId: logOptions.relatedBillId,
+        reason: logOptions.reason,
+        oldBalance,
+        newBalance,
+        delta,
+        description:
+          logOptions.description ||
+          `${logOptions.reason}: ${delta >= 0 ? '+' : ''}${delta.toFixed(2)}`
+      })
+    }
+
+    return { oldBalance, newBalance, delta }
   },
 
   getAccountById: (id) => get().accounts.find((a) => a.id === id),
@@ -108,3 +142,4 @@ export const useAccountStore = create<AccountState>((set, get) => ({
 
   getNetWorth: () => get().getTotalAssets() - get().getTotalLiabilities()
 }))
+

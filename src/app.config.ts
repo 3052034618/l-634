@@ -6,6 +6,7 @@ export default defineAppConfig({
     'pages/asset/index',
     'pages/profile/index',
     'pages/add-transaction/index',
+    'pages/transfer/index',
     'pages/transaction-detail/index',
     'pages/add-account/index',
     'pages/account-detail/index',

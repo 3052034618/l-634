@@ -14,14 +14,18 @@
 }
 
 .iconWrap {
-  width: 80rpx;
-  height: 80rpx;
+  width: 88rpx;
+  height: 88rpx;
   border-radius: $radius-md;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: $spacing-md;
   flex-shrink: 0;
+}
+
+.iconWrapTransfer {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
 }
 
 .icon {

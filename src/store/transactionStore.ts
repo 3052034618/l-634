@@ -28,6 +28,13 @@ interface TransactionState {
     attachments?: TransactionAttachment[]
     date?: string
   }) => Transaction
+  addTransfer: (data: {
+    fromAccountId: string
+    toAccountId: string
+    amount: number
+    date?: string
+    note?: string
+  }) => Transaction
   updateTransaction: (id: string, data: Partial<Transaction>) => void
   deleteTransaction: (id: string) => void
   getTransactionById: (id: string) => Transaction | undefined
@@ -94,7 +101,14 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     }
 
     const accountStore = useAccountStore.getState()
-    accountStore.adjustBalance(data.accountId, data.amount, data.type === 'income')
+    if (data.type !== 'transfer') {
+      accountStore.adjustBalance(data.accountId, data.amount, data.type === 'income', {
+        log: true,
+        relatedTransactionId: newTx.id,
+        reason: 'add_transaction',
+        description: `${data.type === 'income' ? '新增收入' : '新增支出'} ¥${data.amount.toFixed(2)} - ${categoryName || '未分类'}`
+      })
+    }
 
     const updated = [newTx, ...get().transactions].sort(
       (a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf()
@@ -110,6 +124,69 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     }
 
     return newTx
+  },
+
+  addTransfer: (data) => {
+    const accountStore = useAccountStore.getState()
+    const fromAcc = accountStore.getAccountById(data.fromAccountId)
+    const toAcc = accountStore.getAccountById(data.toAccountId)
+
+    if (!fromAcc || !toAcc) {
+      throw new Error('账户不存在')
+    }
+    if (data.fromAccountId === data.toAccountId) {
+      throw new Error('转出和转入账户不能相同')
+    }
+    if (data.amount <= 0) {
+      throw new Error('转账金额必须大于0')
+    }
+
+    const txId = generateId()
+    const transferDate = data.date || dayjs().format('YYYY-MM-DD')
+    const noteText = data.note ? `（${data.note}）` : ''
+
+    // 第一步：从转出账户扣钱
+    accountStore.adjustBalance(data.fromAccountId, data.amount, false, {
+      log: true,
+      relatedTransactionId: txId,
+      reason: 'transfer_out',
+      description: `转账到${toAcc.name} ¥${data.amount.toFixed(2)}${noteText}`
+    })
+
+    // 第二步：给转入账户加钱
+    accountStore.adjustBalance(data.toAccountId, data.amount, true, {
+      log: true,
+      relatedTransactionId: txId,
+      reason: 'transfer_in',
+      description: `从${fromAcc.name}转入 ¥${data.amount.toFixed(2)}${noteText}`
+    })
+
+    // 第三步：生成一条transfer类型交易（只存转出账户视角，带transferToAccountId）
+    const transferTx: Transaction = {
+      id: txId,
+      type: 'transfer',
+      amount: data.amount,
+      accountId: data.fromAccountId,
+      transferToAccountId: data.toAccountId,
+      categoryId: '_transfer',
+      categoryName: '账户转账',
+      description: `${fromAcc.name} → ${toAcc.name}`,
+      note: data.note,
+      attachments: [],
+      date: transferDate,
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().toISOString(),
+      isAutoClassified: false
+    }
+
+    const updated = [transferTx, ...get().transactions].sort(
+      (a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf()
+    )
+    setStorageSync(TX_KEY, updated)
+    set({ transactions: updated })
+    console.log('[TransactionStore] Added transfer:', txId, 'from', fromAcc.name, 'to', toAcc.name)
+
+    return transferTx
   },
 
   updateTransaction: (id, data) => {
@@ -140,15 +217,25 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     const typeChanged = newType !== oldType
 
     if (accountChanged || amountChanged || typeChanged) {
-      // 第一步：撤销旧交易对旧账户的影响
-      // 旧类型是收入 → 之前增加了余额 → 现在要减少
-      // 旧类型是支出 → 之前减少了余额 → 现在要增加
-      accountStore.adjustBalance(oldAccountId, oldAmount, oldType === 'expense')
+      // 撤销旧交易对旧账户的影响（仅非transfer类型需要记账）
+      if (oldType !== 'transfer') {
+        accountStore.adjustBalance(oldAccountId, oldAmount, oldType === 'expense', {
+          log: true,
+          relatedTransactionId: id,
+          reason: 'update_transaction',
+          description: `[撤销旧] ${oldType === 'income' ? '收入' : '支出'} ¥${oldAmount.toFixed(2)}`
+        })
+      }
 
-      // 第二步：应用新交易对新账户的影响
-      // 新类型是收入 → 增加余额
-      // 新类型是支出 → 减少余额
-      accountStore.adjustBalance(newAccountId, newAmount, newType === 'income')
+      // 应用新交易对新账户的影响（仅非transfer类型需要记账）
+      if (newType !== 'transfer') {
+        accountStore.adjustBalance(newAccountId, newAmount, newType === 'income', {
+          log: true,
+          relatedTransactionId: id,
+          reason: 'update_transaction',
+          description: `[应用新] ${newType === 'income' ? '收入' : '支出'} ¥${newAmount.toFixed(2)}`
+        })
+      }
     }
 
     const updated = get().transactions.map((t) =>
@@ -167,9 +254,14 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
 
   deleteTransaction: (id) => {
     const tx = get().getTransactionById(id)
-    if (tx) {
+    if (tx && tx.type !== 'transfer') {
       const accountStore = useAccountStore.getState()
-      accountStore.adjustBalance(tx.accountId, tx.amount, tx.type !== 'income')
+      accountStore.adjustBalance(tx.accountId, tx.amount, tx.type !== 'income', {
+        log: true,
+        relatedTransactionId: id,
+        reason: 'delete_transaction',
+        description: `删除${tx.type === 'income' ? '收入' : '支出'} ¥${tx.amount.toFixed(2)}`
+      })
     }
     const updated = get().transactions.filter((t) => t.id !== id)
     setStorageSync(TX_KEY, updated)
@@ -195,8 +287,11 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     let totalExpense = 0
 
     monthTxs.forEach((tx) => {
+      // 转账不计入收支汇总和预算
+      if (tx.type === 'transfer') return
+
       if (tx.type === 'income') totalIncome += tx.amount
-      else totalExpense += tx.amount
+      else if (tx.type === 'expense') totalExpense += tx.amount
 
       const existing = byCategory.get(tx.categoryId)
       if (existing) {

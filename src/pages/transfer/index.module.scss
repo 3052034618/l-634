@@ -1,0 +1,140 @@
+@import '@/styles/variables.scss';
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-4xl $spacing-xl;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-sm;
+  color: $text-secondary;
+}
+
+.card {
+  background: #fff;
+  border-radius: $radius-lg;
+  margin: $spacing-md;
+  padding: $spacing-sm $spacing-lg;
+  box-shadow: $shadow-sm;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-lg 0;
+  border-bottom: 1px solid $border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.label {
+  font-size: $font-sm;
+  color: $text-secondary;
+  min-width: 80px;
+}
+
+.pickerValue {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $spacing-sm;
+  font-size: $font-sm;
+  color: $text-primary;
+}
+
+.pickerArrow {
+  color: $text-tertiary;
+  font-size: $font-lg;
+  margin-left: $spacing-xs;
+}
+
+.accountIcon {
+  font-size: $font-xl;
+}
+
+.accountInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.accountName {
+  font-size: $font-sm;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.accountBalance {
+  font-size: $font-xs;
+  color: $text-tertiary;
+  margin-top: 2px;
+}
+
+.swapRow {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-xs 0;
+}
+
+.swapBtn {
+  padding: $spacing-xs $spacing-md;
+  background: $bg-secondary;
+  border-radius: $radius-md;
+  font-size: $font-xs;
+  color: $brand-600;
+  font-weight: 600;
+}
+
+.amountInputWrap {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.amountPrefix {
+  font-size: $font-lg;
+  font-weight: 700;
+  color: $text-primary;
+}
+
+.amountInput {
+  font-size: $font-xl;
+  font-weight: 700;
+  color: $text-primary;
+  text-align: right;
+  background: transparent;
+  min-width: 120px;
+}
+
+.textInput {
+  flex: 1;
+  text-align: right;
+  font-size: $font-sm;
+  color: $text-primary;
+}
+
+.confirmBtn {
+  margin: $spacing-2xl $spacing-md;
+  background: $brand-500;
+  color: #fff;
+  padding: $spacing-lg;
+  border-radius: $radius-lg;
+  text-align: center;
+  font-size: $font-base;
+  font-weight: 600;
+  box-shadow: $shadow-md;
+}

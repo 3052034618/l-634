@@ -1,11 +1,13 @@
-import React, { useMemo } from 'react'
-import { View, Text, useDidShow, useRouter, navigateBack, showModal, showToast } from '@tarojs/taro'
+import React, { useState, useMemo } from 'react'
+import { View, Text, ScrollView, useDidShow, useRouter, navigateBack, showModal, showToast } from '@tarojs/taro'
 import { useAccountStore } from '@/store/accountStore'
 import { useTransactionStore } from '@/store/transactionStore'
+import { useBalanceLogStore } from '@/store/balanceLogStore'
 import TransactionItem from '@/components/TransactionItem'
 import { formatMoney, getMonthKey } from '@/utils/format'
-import type { AccountType } from '@/types'
+import type { AccountType, BalanceChangeReason } from '@/types'
 import dayjs from 'dayjs'
+import classnames from 'classnames'
 import styles from './index.module.scss'
 
 const typeMap: Record<AccountType, string> = {
@@ -14,16 +16,32 @@ const typeMap: Record<AccountType, string> = {
   credit: '信用卡'
 }
 
+const reasonMap: Record<BalanceChangeReason, { label: string; icon: string; color: string }> = {
+  add_transaction: { label: '新增交易', icon: '➕', color: '#3b82f6' },
+  update_transaction: { label: '编辑交易', icon: '✏️', color: '#f59e0b' },
+  delete_transaction: { label: '删除交易', icon: '🗑️', color: '#ef4444' },
+  transfer_out: { label: '转出', icon: '↗️', color: '#f59e0b' },
+  transfer_in: { label: '转入', icon: '↙️', color: '#10b981' },
+  mark_paid: { label: '标记还款', icon: '✅', color: '#10b981' },
+  manual_adjust: { label: '手动调整', icon: '⚙️', color: '#6366f1' }
+}
+
 const AccountDetailPage: React.FC = () => {
   const router = useRouter()
   const id = router.params.id as string
-  const getAccountById = useAccountStore((s) => s.getAccountById)
-  const deleteAccount = useAccountStore((s) => s.deleteAccount)
-  const getMonthTransactions = useTransactionStore((s) => s.getMonthTransactions)
 
-  const account = useMemo(() => getAccountById(id), [id, getAccountById])
+  const accounts = useAccountStore((s) => s.accounts)
+  const deleteAccount = useAccountStore((s) => s.deleteAccount)
+  const transactions = useTransactionStore((s) => s.transactions)
+  const balanceLogs = useBalanceLogStore((s) => s.logs)
+  const loadLogs = useBalanceLogStore((s) => s.loadLogs)
+
+  const [tab, setTab] = useState<'tx' | 'log'>('tx')
+
+  const account = useMemo(() => accounts.find((a) => a.id === id), [id, accounts])
 
   useDidShow(() => {
+    loadLogs()
     if (!account) {
       showToast({ title: '账户不存在', icon: 'none' })
       setTimeout(() => navigateBack(), 1000)
@@ -33,7 +51,20 @@ const AccountDetailPage: React.FC = () => {
   if (!account) return null
 
   const currentMonth = dayjs().format('YYYY-MM')
-  const monthTx = getMonthTransactions(currentMonth).filter((t) => t.accountId === id)
+  const accountTxs = useMemo(() => {
+    return transactions
+      .filter((t) => t.accountId === id || t.transferToAccountId === id)
+      .sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf())
+  }, [transactions, id])
+
+  const monthTx = accountTxs.filter((t) => dayjs(t.date).format('YYYY-MM') === currentMonth)
+
+  const logs = useMemo(() => {
+    return balanceLogs
+      .filter((l) => l.accountId === id)
+      .sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf())
+  }, [balanceLogs, id])
+
   const creditUsed = account.type === 'credit' && account.creditLimit
     ? Math.abs(account.balance)
     : 0
@@ -81,6 +112,21 @@ const AccountDetailPage: React.FC = () => {
       </View>
 
       <View className={styles.content}>
+        <View className={styles.tabBar}>
+          <View
+            className={classnames(styles.tabItem, tab === 'tx' && styles.active)}
+            onClick={() => setTab('tx')}
+          >
+            <Text>交易记录（{accountTxs.length}）</Text>
+          </View>
+          <View
+            className={classnames(styles.tabItem, tab === 'log' && styles.active)}
+            onClick={() => setTab('log')}
+          >
+            <Text>余额流水（{logs.length}）</Text>
+          </View>
+        </View>
+
         <View className={styles.infoCard}>
           <View className={styles.infoRow}>
             <Text className={styles.infoLabel}>账户类型</Text>
@@ -96,6 +142,10 @@ const AccountDetailPage: React.FC = () => {
               <Text className={styles.infoValue}>{account.note}</Text>
             </View>
           )}
+          <View className={styles.infoRow}>
+            <Text className={styles.infoLabel}>本月交易</Text>
+            <Text className={styles.infoValue}>{monthTx.length} 笔</Text>
+          </View>
         </View>
 
         {account.type === 'credit' && account.creditLimit && (
@@ -134,20 +184,79 @@ const AccountDetailPage: React.FC = () => {
           </View>
         )}
 
-        <View className={styles.infoCard}>
-          <View className={styles.infoRow}>
-            <Text className={styles.infoLabel}>本月交易</Text>
-            <Text className={styles.infoValue}>{monthTx.length} 笔</Text>
-          </View>
-        </View>
-
-        {monthTx.length > 0 && (
-          <View className={styles.txList}>
-            {monthTx.slice(0, 10).map((tx) => (
-              <TransactionItem key={tx.id} transaction={tx} />
-            ))}
-          </View>
-        )}
+        <ScrollView scrollY className={styles.tabContent} enhanced showScrollbar={false}>
+          {tab === 'tx' ? (
+            <View className={styles.listBlock}>
+              {accountTxs.length === 0 ? (
+                <View className={styles.emptyBlock}>
+                  <Text className={styles.emptyIcon}>📝</Text>
+                  <Text className={styles.emptyText}>暂无交易记录</Text>
+                </View>
+              ) : (
+                <View className={styles.txList}>
+                  {accountTxs.slice(0, 50).map((tx) => (
+                    <TransactionItem
+                      key={tx.id}
+                      transaction={tx}
+                      targetAccountId={id}
+                    />
+                  ))}
+                </View>
+              )}
+            </View>
+          ) : (
+            <View className={styles.listBlock}>
+              {logs.length === 0 ? (
+                <View className={styles.emptyBlock}>
+                  <Text className={styles.emptyIcon}>📒</Text>
+                  <Text className={styles.emptyText}>暂无余额流水记录</Text>
+                </View>
+              ) : (
+                <View className={styles.logList}>
+                  {logs.slice(0, 100).map((log) => {
+                    const reasonInfo = reasonMap[log.reason] || {
+                      label: log.reason,
+                      icon: '📌',
+                      color: '#64748b'
+                    }
+                    return (
+                      <View key={log.id} className={styles.logItem}>
+                        <View
+                          className={styles.logIcon}
+                          style={{ backgroundColor: `${reasonInfo.color}15` }}
+                        >
+                          <Text>{reasonInfo.icon}</Text>
+                        </View>
+                        <View className={styles.logContent}>
+                          <View className={styles.logTop}>
+                            <Text className={styles.logReason}>{reasonInfo.label}</Text>
+                            <Text
+                              className={styles.logDelta}
+                              style={{ color: log.delta >= 0 ? '#10b981' : '#ef4444' }}
+                            >
+                              {log.delta >= 0 ? '+' : ''}{formatMoney(log.delta)}
+                            </Text>
+                          </View>
+                          <View className={styles.logBottom}>
+                            <Text className={styles.logDesc}>{log.description}</Text>
+                            <Text className={styles.logDate}>
+                              {dayjs(log.createdAt).format('MM-DD HH:mm')}
+                            </Text>
+                          </View>
+                          <View className={styles.logBalance}>
+                            <Text className={styles.logBalanceText}>
+                              余额变动: {formatMoney(log.oldBalance)} → {formatMoney(log.newBalance)}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    )
+                  })}
+                </View>
+              )}
+            </View>
+          )}
+        </ScrollView>
       </View>
 
       <View className={styles.bottomBar}>
