@@ -1,0 +1,245 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 100px;
+}
+
+.reminderCard {
+  background: linear-gradient(135deg, $warning-50, $warning-100);
+  margin: $spacing-md;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 1px solid $warning-200;
+}
+
+.reminderTitle {
+  font-size: $font-base;
+  font-weight: 600;
+  color: $warning-700;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.reminderList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.reminderItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.6);
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+}
+
+.reminderText {
+  font-size: $font-sm;
+  color: $warning-800;
+  flex: 1;
+}
+
+.reminderBadge {
+  font-size: $font-xs;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.badgeOverdue {
+  background: $danger-500;
+  color: #fff;
+}
+
+.badgeSoon {
+  background: $warning-500;
+  color: #fff;
+}
+
+.content {
+  padding: 0 $spacing-md;
+}
+
+.section {
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-sm;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: $spacing-md;
+  padding-left: $spacing-sm;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.creditCard {
+  background: linear-gradient(135deg, #1e3a5f, #2d5a87);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  min-height: 160px;
+  @include card-shadow;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+  }
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.cardName {
+  font-size: $font-base;
+  font-weight: 600;
+}
+
+.cardBank {
+  font-size: $font-xs;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+
+.cardChip {
+  font-size: $font-3xl;
+}
+
+.cardAmount {
+  margin-top: $spacing-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.cardAmountLabel {
+  font-size: $font-xs;
+  opacity: 0.8;
+}
+
+.cardAmountValue {
+  font-size: $font-2xl;
+  font-weight: 700;
+  margin-top: $spacing-xs;
+}
+
+.cardBottom {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacing-md;
+  position: relative;
+  z-index: 1;
+  font-size: $font-xs;
+  opacity: 0.85;
+}
+
+.cardActions {
+  display: flex;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+  position: relative;
+  z-index: 1;
+}
+
+.actionBtn {
+  flex: 1;
+  padding: $spacing-sm $spacing-md;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-sm;
+  font-size: $font-xs;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.parseCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  @include card-shadow;
+}
+
+.parseTitle {
+  font-size: $font-sm;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.parseDesc {
+  font-size: $font-xs;
+  color: $text-tertiary;
+  line-height: 1.6;
+  margin-bottom: $spacing-md;
+}
+
+.parseTextarea {
+  width: 100%;
+  min-height: 120px;
+  padding: $spacing-md;
+  background: $bg-secondary;
+  border-radius: $radius-md;
+  font-size: $font-sm;
+  color: $text-primary;
+  border: none;
+  outline: none;
+  margin-bottom: $spacing-md;
+}
+
+.parseSubmit {
+  width: 100%;
+  padding: $spacing-md;
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  color: #fff;
+  border-radius: $radius-md;
+  text-align: center;
+  font-size: $font-sm;
+  font-weight: 600;
+}
+
+.empty {
+  text-align: center;
+  padding: $spacing-3xl $spacing-lg;
+  color: $text-tertiary;
+  font-size: $font-sm;
+}
+
+.fab {
+  position: fixed;
+  right: $spacing-lg;
+  bottom: calc(#{$spacing-2xl} + env(safe-area-inset-bottom));
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: $font-2xl;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+  z-index: 100;
+}

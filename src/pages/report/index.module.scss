@@ -1,0 +1,320 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 120px;
+}
+
+.header {
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  padding: $spacing-xl $spacing-lg $spacing-2xl;
+  color: #fff;
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.periodTabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-md;
+  padding: 4px;
+}
+
+.periodTab {
+  padding: $spacing-xs $spacing-lg;
+  font-size: $font-sm;
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: $radius-sm;
+  transition: all 0.2s;
+}
+
+.periodTabActive {
+  background: #fff;
+  color: $brand-600;
+  font-weight: 600;
+}
+
+.monthNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: $spacing-lg;
+  gap: $spacing-lg;
+}
+
+.navBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: $font-lg;
+}
+
+.monthLabel {
+  font-size: $font-xl;
+  font-weight: 600;
+  min-width: 140px;
+  text-align: center;
+}
+
+.summaryCards {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-xl;
+}
+
+.summaryCard {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  backdrop-filter: blur(10px);
+}
+
+.summaryLabel {
+  font-size: $font-xs;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.summaryValue {
+  font-size: $font-lg;
+  font-weight: 600;
+  margin-top: $spacing-xs;
+}
+
+.content {
+  padding: $spacing-md;
+  margin-top: -$spacing-lg;
+}
+
+.card {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  @include card-shadow;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.cardTitle {
+  font-size: $font-base;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.cardSub {
+  font-size: $font-xs;
+  color: $text-tertiary;
+}
+
+.expandBtn {
+  font-size: $font-sm;
+  color: $brand-500;
+}
+
+.categoryTabs {
+  display: flex;
+  background: $bg-secondary;
+  border-radius: $radius-md;
+  padding: 4px;
+  margin-bottom: $spacing-md;
+}
+
+.categoryTab {
+  flex: 1;
+  padding: $spacing-sm;
+  text-align: center;
+  font-size: $font-sm;
+  color: $text-secondary;
+  border-radius: $radius-sm;
+  transition: all 0.2s;
+}
+
+.categoryTabActive {
+  background: #fff;
+  color: $text-primary;
+  font-weight: 600;
+}
+
+.categoryList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.categoryRow {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 1px solid $border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.catIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $brand-50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-xl;
+  margin-right: $spacing-md;
+}
+
+.catInfo {
+  flex: 1;
+}
+
+.catName {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+}
+
+.catAmountRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.catAmount {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 600;
+}
+
+.catPercent {
+  font-size: $font-xs;
+  color: $text-tertiary;
+}
+
+.catBar {
+  flex: 1;
+  height: 6px;
+  background: $bg-secondary;
+  border-radius: 3px;
+  margin: 0 $spacing-md;
+  overflow: hidden;
+}
+
+.catBarFill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.predictCard {
+  background: linear-gradient(135deg, $warning-50, $warning-100);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  border: 1px solid $warning-200;
+}
+
+.predictHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.predictIcon {
+  font-size: $font-2xl;
+  margin-right: $spacing-sm;
+}
+
+.predictTitle {
+  font-size: $font-base;
+  font-weight: 600;
+  color: $warning-700;
+}
+
+.predictContent {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.predictAmount {
+  font-size: $font-2xl;
+  font-weight: 700;
+  color: $warning-600;
+}
+
+.predictTrend {
+  display: flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  font-size: $font-sm;
+  font-weight: 600;
+}
+
+.trendUp {
+  background: $danger-50;
+  color: $danger-600;
+}
+
+.trendDown {
+  background: $success-50;
+  color: $success-600;
+}
+
+.trendStable {
+  background: $info-50;
+  color: $info-600;
+}
+
+.predictTip {
+  margin-top: $spacing-md;
+  font-size: $font-sm;
+  color: $warning-700;
+  line-height: 1.6;
+  padding: $spacing-sm $spacing-md;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: $radius-md;
+}
+
+.actionRow {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.actionBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-lg $spacing-md;
+  background: #fff;
+  border-radius: $radius-md;
+  @include card-shadow;
+}
+
+.actionIcon {
+  font-size: $font-3xl;
+  margin-bottom: $spacing-sm;
+}
+
+.actionLabel {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+}

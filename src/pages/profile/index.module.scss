@@ -1,0 +1,158 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 120px;
+}
+
+.header {
+  background: linear-gradient(135deg, $brand-500 0%, $brand-600 100%);
+  padding: $spacing-2xl $spacing-lg $spacing-3xl;
+  color: #fff;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-4xl;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.userName {
+  font-size: $font-xl;
+  font-weight: 600;
+}
+
+.userDesc {
+  font-size: $font-sm;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 4px;
+}
+
+.statsRow {
+  display: flex;
+  margin-top: $spacing-2xl;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: $radius-md;
+  padding: $spacing-md 0;
+}
+
+.statCol {
+  flex: 1;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.statNum {
+  font-size: $font-xl;
+  font-weight: 700;
+}
+
+.statLabel {
+  font-size: $font-xs;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 4px;
+}
+
+.content {
+  padding: $spacing-md;
+  margin-top: -$spacing-xl;
+}
+
+.menuGroup {
+  background: #fff;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-md;
+  overflow: hidden;
+  @include card-shadow;
+}
+
+.menuGroupTitle {
+  padding: $spacing-md $spacing-lg $spacing-xs;
+  font-size: $font-xs;
+  color: $text-tertiary;
+  font-weight: 500;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1px solid $border-light;
+  transition: background 0.2s;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background: $bg-secondary;
+  }
+}
+
+.menuIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-md;
+  background: $brand-50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-lg;
+  margin-right: $spacing-md;
+}
+
+.menuText {
+  flex: 1;
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+}
+
+.menuArrow {
+  font-size: $font-lg;
+  color: $text-tertiary;
+}
+
+.menuBadge {
+  background: $danger-500;
+  color: #fff;
+  font-size: $font-xs;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-right: $spacing-sm;
+  font-weight: 600;
+}
+
+.menuValue {
+  font-size: $font-sm;
+  color: $text-tertiary;
+  margin-right: $spacing-sm;
+}
+
+.version {
+  text-align: center;
+  padding: $spacing-lg;
+  font-size: $font-xs;
+  color: $text-tertiary;
+}

@@ -1,0 +1,171 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 100px;
+}
+
+.amountHeader {
+  background: $bg-page;
+  padding: $spacing-2xl $spacing-lg $spacing-2xl;
+  text-align: center;
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  color: #fff;
+}
+
+.amountLabel {
+  font-size: $font-sm;
+  opacity: 0.8;
+}
+
+.amountValue {
+  font-size: $font-4xl;
+  font-weight: 700;
+  margin-top: $spacing-sm;
+}
+
+.amountValueExpense {
+  color: #fff;
+}
+
+.amountValueIncome {
+  color: #fff;
+}
+
+.headerIncome {
+  background: linear-gradient(135deg, $success-500, $success-600);
+}
+
+.headerExpense {
+  background: linear-gradient(135deg, $danger-500, $danger-600);
+}
+
+.infoCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  margin: $spacing-md;
+  padding: 0 $spacing-lg;
+  overflow: hidden;
+  @include card-shadow;
+}
+
+.infoRow {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-md 0;
+  border-bottom: 1px solid $border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.infoLabel {
+  width: 80px;
+  font-size: $font-sm;
+  color: $text-tertiary;
+  flex-shrink: 0;
+}
+
+.infoValue {
+  flex: 1;
+  font-size: $font-sm;
+  color: $text-primary;
+  text-align: right;
+}
+
+.infoValueMultiline {
+  text-align: left;
+  line-height: 1.6;
+}
+
+.infoValueWrap {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: $spacing-sm;
+}
+
+.categoryTag {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-xs $spacing-sm;
+  background: $brand-50;
+  border-radius: $radius-sm;
+  color: $brand-600;
+  font-size: $font-xs;
+  font-weight: 500;
+}
+
+.autoTag {
+  background: $info-50;
+  color: $info-600;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  font-size: $font-xs;
+}
+
+.attachments {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.attachmentItem {
+  width: 80px;
+  height: 80px;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $bg-secondary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.attachmentImage {
+  width: 100%;
+  height: 100%;
+}
+
+.attachmentPlaceholder {
+  font-size: $font-2xl;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  display: flex;
+  gap: $spacing-md;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.btn {
+  flex: 1;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  text-align: center;
+  font-size: $font-sm;
+  font-weight: 600;
+}
+
+.btnEdit {
+  background: $brand-50;
+  color: $brand-600;
+}
+
+.btnDelete {
+  background: $danger-50;
+  color: $danger-600;
+}

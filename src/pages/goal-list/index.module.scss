@@ -1,0 +1,280 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 120px;
+}
+
+.header {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  padding: $spacing-xl $spacing-lg $spacing-3xl;
+  color: #fff;
+}
+
+.headerTitle {
+  font-size: $font-xl;
+  font-weight: 600;
+}
+
+.statsRow {
+  display: flex;
+  gap: $spacing-xl;
+  margin-top: $spacing-lg;
+}
+
+.stat {
+  flex: 1;
+}
+
+.statLabel {
+  font-size: $font-xs;
+  opacity: 0.8;
+}
+
+.statValue {
+  font-size: $font-xl;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-md;
+  padding: 4px;
+  margin-top: $spacing-lg;
+}
+
+.tab {
+  flex: 1;
+  padding: $spacing-sm;
+  text-align: center;
+  font-size: $font-sm;
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: $radius-sm;
+  transition: all 0.2s;
+}
+
+.tabActive {
+  background: #fff;
+  color: #d97706;
+  font-weight: 600;
+}
+
+.content {
+  padding: $spacing-md;
+  margin-top: -$spacing-xl;
+}
+
+.goalCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  @include card-shadow;
+}
+
+.goalTop {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.goalIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-2xl;
+  margin-right: $spacing-md;
+}
+
+.goalInfo {
+  flex: 1;
+}
+
+.goalName {
+  font-size: $font-base;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.goalDeadline {
+  font-size: $font-xs;
+  color: $text-tertiary;
+  margin-top: 4px;
+}
+
+.goalAmount {
+  text-align: right;
+}
+
+.currentAmount {
+  font-size: $font-lg;
+  font-weight: 700;
+  color: $text-primary;
+}
+
+.targetAmount {
+  font-size: $font-xs;
+  color: $text-tertiary;
+  margin-top: 2px;
+}
+
+.progressWrap {
+  margin-top: $spacing-sm;
+}
+
+.progressBar {
+  height: 8px;
+  background: $bg-secondary;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacing-sm;
+  font-size: $font-xs;
+  color: $text-tertiary;
+}
+
+.empty {
+  text-align: center;
+  padding: $spacing-3xl $spacing-lg;
+  color: $text-tertiary;
+  font-size: $font-sm;
+}
+
+.fab {
+  position: fixed;
+  right: $spacing-lg;
+  bottom: calc(#{$spacing-2xl} + env(safe-area-inset-bottom));
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: $font-2xl;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+  z-index: 100;
+}
+
+.modalMask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+}
+
+.modalContent {
+  width: 100%;
+  background: #fff;
+  border-radius: $radius-lg $radius-lg 0 0;
+  padding: $spacing-lg;
+  padding-bottom: calc(#{$spacing-lg} + env(safe-area-inset-bottom));
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.modalTitle {
+  font-size: $font-lg;
+  font-weight: 600;
+  color: $text-primary;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.modalRow {
+  margin-bottom: $spacing-md;
+}
+
+.modalLabel {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+  margin-bottom: $spacing-sm;
+}
+
+.modalInput {
+  width: 100%;
+  padding: $spacing-md;
+  background: $bg-secondary;
+  border-radius: $radius-md;
+  font-size: $font-sm;
+  color: $text-primary;
+}
+
+.iconPicker {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.iconOption {
+  width: 48px;
+  height: 48px;
+  border-radius: $radius-md;
+  background: $bg-secondary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-2xl;
+  border: 2px solid transparent;
+}
+
+.iconOptionActive {
+  border-color: $brand-500;
+  background: $brand-50;
+}
+
+.modalActions {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+}
+
+.modalBtn {
+  flex: 1;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  text-align: center;
+  font-size: $font-sm;
+  font-weight: 600;
+}
+
+.btnCancel {
+  background: $bg-secondary;
+  color: $text-secondary;
+}
+
+.btnConfirm {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+}

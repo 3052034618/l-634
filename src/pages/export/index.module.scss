@@ -1,0 +1,152 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 40px;
+}
+
+.content {
+  padding: $spacing-md;
+}
+
+.sectionCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  @include card-shadow;
+}
+
+.sectionTitle {
+  font-size: $font-base;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.sectionDesc {
+  font-size: $font-sm;
+  color: $text-tertiary;
+  line-height: 1.6;
+  margin-bottom: $spacing-lg;
+}
+
+.exportList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.exportItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $bg-secondary;
+  border-radius: $radius-md;
+  transition: all 0.2s;
+}
+
+.exportItem:active {
+  background: $border-light;
+  transform: scale(0.98);
+}
+
+.exportIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: $radius-md;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-2xl;
+  margin-right: $spacing-md;
+}
+
+.exportInfo {
+  flex: 1;
+}
+
+.exportName {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 600;
+}
+
+.exportSub {
+  font-size: $font-xs;
+  color: $text-tertiary;
+  margin-top: 4px;
+}
+
+.exportArrow {
+  font-size: $font-lg;
+  color: $text-tertiary;
+}
+
+.statsCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  @include card-shadow;
+}
+
+.statsTitle {
+  font-size: $font-sm;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+}
+
+.statItem {
+  background: $bg-secondary;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  text-align: center;
+}
+
+.statValue {
+  font-size: $font-xl;
+  font-weight: 700;
+  color: $brand-600;
+}
+
+.statLabel {
+  font-size: $font-xs;
+  color: $text-tertiary;
+  margin-top: 4px;
+}
+
+.tipCard {
+  background: linear-gradient(135deg, $info-50, $info-100);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 1px solid $info-200;
+}
+
+.tipTitle {
+  font-size: $font-sm;
+  font-weight: 600;
+  color: $info-700;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.tipText {
+  font-size: $font-xs;
+  color: $info-800;
+  line-height: 1.7;
+}

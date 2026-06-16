@@ -1,0 +1,313 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 140px;
+}
+
+.header {
+  padding: $spacing-xl $spacing-lg $spacing-2xl;
+  color: #fff;
+  position: relative;
+}
+
+.goalIconWrap {
+  width: 80px;
+  height: 80px;
+  border-radius: $radius-xl;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-4xl;
+  margin: 0 auto $spacing-md;
+}
+
+.goalName {
+  text-align: center;
+  font-size: $font-xl;
+  font-weight: 600;
+}
+
+.goalDeadline {
+  text-align: center;
+  font-size: $font-sm;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+.amountRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: $spacing-md;
+  margin-top: $spacing-xl;
+}
+
+.currentAmount {
+  font-size: $font-3xl;
+  font-weight: 700;
+}
+
+.separator {
+  font-size: $font-lg;
+  opacity: 0.6;
+}
+
+.targetAmount {
+  font-size: $font-xl;
+  opacity: 0.85;
+}
+
+.percentBadge {
+  display: inline-block;
+  padding: $spacing-xs $spacing-md;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-sm;
+  font-size: $font-sm;
+  font-weight: 600;
+  margin-top: $spacing-md;
+}
+
+.percentWrap {
+  text-align: center;
+}
+
+.content {
+  padding: $spacing-md;
+  margin-top: -$spacing-xl;
+}
+
+.progressCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  @include card-shadow;
+}
+
+.progressBar {
+  height: 12px;
+  background: $bg-secondary;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: $spacing-md;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.3s;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: $font-sm;
+  color: $text-secondary;
+}
+
+.messagesCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-md;
+  overflow: hidden;
+  @include card-shadow;
+}
+
+.cardHeader {
+  padding: $spacing-md $spacing-lg;
+  font-size: $font-sm;
+  font-weight: 600;
+  color: $text-primary;
+  border-bottom: 1px solid $border-light;
+}
+
+.messageItem {
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1px solid $border-light;
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.messageIcon {
+  font-size: $font-lg;
+  flex-shrink: 0;
+}
+
+.messageContent {
+  flex: 1;
+}
+
+.messageText {
+  font-size: $font-sm;
+  color: $text-primary;
+  line-height: 1.5;
+}
+
+.messageTime {
+  font-size: $font-xs;
+  color: $text-tertiary;
+  margin-top: 4px;
+}
+
+.contributionsCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-md;
+  overflow: hidden;
+  @include card-shadow;
+}
+
+.contributionItem {
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1px solid $border-light;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.contributionInfo {
+  flex: 1;
+}
+
+.contributionDate {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+}
+
+.contributionNote {
+  font-size: $font-xs;
+  color: $text-tertiary;
+  margin-top: 2px;
+}
+
+.contributionAmount {
+  font-size: $font-sm;
+  color: $success-600;
+  font-weight: 600;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: #fff;
+  display: flex;
+  gap: $spacing-md;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.btn {
+  flex: 1;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  text-align: center;
+  font-size: $font-sm;
+  font-weight: 600;
+}
+
+.btnContribute {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+}
+
+.btnDelete {
+  background: $danger-50;
+  color: $danger-600;
+}
+
+.modalMask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg;
+}
+
+.modalContent {
+  width: 100%;
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+}
+
+.modalTitle {
+  font-size: $font-lg;
+  font-weight: 600;
+  color: $text-primary;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.modalRow {
+  margin-bottom: $spacing-md;
+}
+
+.modalLabel {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+  margin-bottom: $spacing-sm;
+}
+
+.modalInput {
+  width: 100%;
+  padding: $spacing-md;
+  background: $bg-secondary;
+  border-radius: $radius-md;
+  font-size: $font-sm;
+  color: $text-primary;
+}
+
+.modalActions {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+}
+
+.modalBtn {
+  flex: 1;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  text-align: center;
+  font-size: $font-sm;
+  font-weight: 600;
+}
+
+.btnCancel {
+  background: $bg-secondary;
+  color: $text-secondary;
+}
+
+.btnConfirm {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+}
+
+.empty {
+  text-align: center;
+  padding: $spacing-xl;
+  color: $text-tertiary;
+  font-size: $font-sm;
+}

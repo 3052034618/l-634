@@ -1,0 +1,98 @@
+@use '@/styles/variables.scss' as *;
+
+.wrap {
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.sm {
+  padding: $spacing-sm;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.label {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+}
+
+.amount {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.bar {
+  height: 12rpx;
+  background: $color-bg-hover;
+  border-radius: $radius-round;
+  overflow: visible;
+  position: relative;
+}
+
+.fill {
+  height: 100%;
+  border-radius: $radius-round;
+  transition: width $transition-slow;
+  background: $color-primary;
+}
+
+.overFill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    $color-error,
+    $color-error 8rpx,
+    #fca5a5 8rpx,
+    #fca5a5 16rpx
+  );
+  border-radius: 0 $radius-round $radius-round 0;
+  opacity: 0.8;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $spacing-xs;
+}
+
+.percent {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+}
+
+.statusWarn {
+  font-size: $font-size-xs;
+  color: $color-warning;
+}
+
+.statusOver {
+  font-size: $font-size-xs;
+  color: $color-error;
+}
+
+.normal {
+  color: $color-primary;
+  .fill { background: $color-primary; }
+}
+
+.warning {
+  color: $color-warning;
+  .fill { background: $color-warning; }
+  .amount { color: $color-warning; }
+}
+
+.over {
+  color: $color-error;
+  .fill { background: $color-error; }
+  .amount { color: $color-error; }
+}

@@ -1,0 +1,184 @@
+@use '@/styles/variables.scss' as *;
+
+.typeTabs {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xs;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.typeTab {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+  transition: all $transition-base;
+
+  &.expenseActive {
+    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+    color: $color-text-white;
+  }
+  &.incomeActive {
+    background: $gradient-primary;
+    color: $color-text-white;
+  }
+}
+
+.amountSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  text-align: center;
+}
+
+.amountLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.amountInput {
+  font-size: 72rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-top: $spacing-sm;
+  text-align: center;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin: $spacing-lg 0 $spacing-md;
+}
+
+.categoryGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.fieldRow {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-sm;
+  box-shadow: $shadow-card;
+  display: flex;
+  align-items: center;
+}
+
+.fieldLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  width: 120rpx;
+  flex-shrink: 0;
+}
+
+.fieldValue {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.fieldInput {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+}
+
+.fieldArrow {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-left: $spacing-sm;
+}
+
+.attachmentSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+.attachmentItem {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: $radius-md;
+  background: $color-bg-hover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.addAttachment {
+  border: 2rpx dashed $color-border;
+  flex-direction: column;
+}
+
+.attachmentIcon {
+  font-size: 40rpx;
+}
+
+.attachmentText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.submitBtn {
+  position: fixed;
+  left: $page-padding;
+  right: $page-padding;
+  bottom: $page-padding;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: $gradient-primary;
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(16, 185, 129, 0.3);
+  transition: all $transition-base;
+  z-index: 100;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+
+  &.expense {
+    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+    box-shadow: 0 8rpx 24rpx rgba(239, 68, 68, 0.3);
+  }
+}
+
+.autoTag {
+  display: inline-flex;
+  align-items: center;
+  background: $color-bg-primary-soft;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  margin-left: $spacing-sm;
+}

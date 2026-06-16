@@ -1,0 +1,116 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 120px;
+}
+
+.formCard {
+  background: #fff;
+  margin: $spacing-md;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  @include card-shadow;
+}
+
+.formRow {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1px solid $border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.formLabel {
+  width: 100px;
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+}
+
+.formInput {
+  flex: 1;
+  font-size: $font-sm;
+  color: $text-primary;
+  text-align: right;
+}
+
+.formInput::placeholder {
+  color: $text-placeholder;
+}
+
+.typeSection {
+  padding: $spacing-md $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 600;
+  margin-bottom: $spacing-md;
+}
+
+.typeOptions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.typeOption {
+  flex: 1;
+  padding: $spacing-lg $spacing-md;
+  border-radius: $radius-md;
+  background: $bg-secondary;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.typeOptionActive {
+  background: $brand-50;
+  border-color: $brand-500;
+}
+
+.typeIcon {
+  font-size: $font-3xl;
+  margin-bottom: $spacing-xs;
+}
+
+.typeName {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+}
+
+.creditFields {
+  background: #fff;
+  margin: $spacing-md;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  @include card-shadow;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.saveBtn {
+  width: 100%;
+  padding: $spacing-md;
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  color: #fff;
+  border-radius: $radius-md;
+  text-align: center;
+  font-size: $font-base;
+  font-weight: 600;
+}

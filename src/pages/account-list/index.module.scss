@@ -1,0 +1,84 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 100px;
+}
+
+.content {
+  padding: $spacing-md;
+}
+
+.accountCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  @include card-shadow;
+}
+
+.accountIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-2xl;
+  margin-right: $spacing-md;
+}
+
+.accountInfo {
+  flex: 1;
+}
+
+.accountName {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 600;
+}
+
+.accountType {
+  font-size: $font-xs;
+  color: $text-tertiary;
+  margin-top: 4px;
+}
+
+.accountBalance {
+  font-size: $font-base;
+  color: $text-primary;
+  font-weight: 700;
+}
+
+.arrow {
+  color: $text-tertiary;
+  font-size: $font-lg;
+  margin-left: $spacing-sm;
+}
+
+.fab {
+  position: fixed;
+  right: $spacing-lg;
+  bottom: calc(#{$spacing-2xl} + env(safe-area-inset-bottom));
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: $font-2xl;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+  z-index: 100;
+}
+
+.empty {
+  text-align: center;
+  padding: $spacing-3xl $spacing-lg;
+  color: $text-tertiary;
+  font-size: $font-sm;
+}

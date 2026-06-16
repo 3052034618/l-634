@@ -1,0 +1,117 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 40px;
+}
+
+.tabs {
+  display: flex;
+  background: #fff;
+  padding: $spacing-sm $spacing-md;
+  gap: $spacing-sm;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.tab {
+  flex: 1;
+  padding: $spacing-sm $spacing-md;
+  text-align: center;
+  font-size: $font-sm;
+  color: $text-secondary;
+  border-radius: $radius-md;
+  background: $bg-secondary;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.tabActive {
+  background: $brand-500;
+  color: #fff;
+  font-weight: 600;
+}
+
+.content {
+  padding: $spacing-md;
+}
+
+.categorySection {
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-sm;
+  color: $text-tertiary;
+  margin-bottom: $spacing-sm;
+  padding-left: $spacing-xs;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-sm;
+}
+
+.categoryItem {
+  background: #fff;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-xs;
+  text-align: center;
+  @include card-shadow;
+  transition: all 0.2s;
+}
+
+.categoryItem:active {
+  transform: scale(0.95);
+}
+
+.catIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-xl;
+  margin: 0 auto $spacing-xs;
+}
+
+.catName {
+  font-size: $font-xs;
+  color: $text-primary;
+  font-weight: 500;
+}
+
+.catCount {
+  font-size: 10px;
+  color: $text-tertiary;
+  margin-top: 2px;
+}
+
+.tipCard {
+  background: linear-gradient(135deg, $brand-50, $brand-100);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 1px solid $brand-200;
+  margin-top: $spacing-md;
+}
+
+.tipTitle {
+  font-size: $font-sm;
+  font-weight: 600;
+  color: $brand-700;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.tipText {
+  font-size: $font-xs;
+  color: $brand-800;
+  line-height: 1.7;
+}

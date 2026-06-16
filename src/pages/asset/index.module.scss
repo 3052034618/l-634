@@ -1,0 +1,178 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 120px;
+}
+
+.header {
+  background: linear-gradient(135deg, #1e3a5f 0%, #0f766e 50%, #059669 100%);
+  padding: $spacing-xl $spacing-lg $spacing-3xl;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -50px;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -40px;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+  }
+}
+
+.headerTitle {
+  font-size: $font-xl;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.netWorthCard {
+  margin-top: $spacing-xl;
+  position: relative;
+  z-index: 1;
+}
+
+.netWorthLabel {
+  font-size: $font-sm;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.netWorthValue {
+  font-size: $font-4xl;
+  font-weight: 700;
+  margin-top: $spacing-xs;
+  letter-spacing: -1px;
+}
+
+.assetStats {
+  display: flex;
+  gap: $spacing-xl;
+  margin-top: $spacing-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.statItem {
+  flex: 1;
+}
+
+.statLabel {
+  font-size: $font-xs;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.statValue {
+  font-size: $font-lg;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.content {
+  padding: $spacing-md;
+  margin-top: -$spacing-xl;
+}
+
+.section {
+  margin-bottom: $spacing-md;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-base;
+  font-weight: 600;
+  color: $text-primary;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.sectionTitleIcon {
+  font-size: $font-lg;
+}
+
+.sectionExtra {
+  font-size: $font-sm;
+  color: $brand-500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.accountList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.goalList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.addCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  border: 2px dashed $border-color;
+  @include card-shadow;
+  transition: all 0.2s;
+}
+
+.addCard:active {
+  transform: scale(0.98);
+  background: $bg-secondary;
+}
+
+.addIcon {
+  font-size: $font-2xl;
+  color: $brand-500;
+}
+
+.addText {
+  font-size: $font-sm;
+  color: $text-secondary;
+  font-weight: 500;
+}
+
+.emptyTip {
+  text-align: center;
+  padding: $spacing-2xl $spacing-lg;
+  color: $text-tertiary;
+  font-size: $font-sm;
+}
+
+.chartCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  @include card-shadow;
+}

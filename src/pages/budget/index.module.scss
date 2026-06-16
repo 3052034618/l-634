@@ -1,0 +1,248 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 120px;
+}
+
+.header {
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  padding: $spacing-xl $spacing-lg $spacing-2xl;
+  color: #fff;
+}
+
+.monthNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xl;
+}
+
+.navBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-lg;
+}
+
+.monthLabel {
+  font-size: $font-xl;
+  font-weight: 600;
+  min-width: 140px;
+  text-align: center;
+}
+
+.totalBudget {
+  text-align: center;
+  margin-top: $spacing-xl;
+}
+
+.totalLabel {
+  font-size: $font-sm;
+  opacity: 0.8;
+}
+
+.totalValue {
+  font-size: $font-3xl;
+  font-weight: 700;
+  margin-top: $spacing-xs;
+}
+
+.totalProgress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+  font-size: $font-sm;
+}
+
+.spentText {
+  opacity: 0.9;
+}
+
+.remainText {
+  opacity: 0.9;
+}
+
+.content {
+  padding: $spacing-md;
+  margin-top: -$spacing-lg;
+}
+
+.alertList {
+  margin-bottom: $spacing-md;
+}
+
+.alertItem {
+  background: #fff;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+  border-left: 4px solid;
+  @include card-shadow;
+}
+
+.alertWarning {
+  border-left-color: $warning-500;
+  background: linear-gradient(90deg, $warning-50, #fff);
+}
+
+.alertOverdue {
+  border-left-color: $danger-500;
+  background: linear-gradient(90deg, $danger-50, #fff);
+}
+
+.alertIcon {
+  font-size: $font-xl;
+  margin-right: $spacing-md;
+}
+
+.alertText {
+  flex: 1;
+  font-size: $font-sm;
+  color: $text-primary;
+  line-height: 1.5;
+}
+
+.budgetCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  @include card-shadow;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.cardTitle {
+  font-size: $font-base;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.editBtn {
+  font-size: $font-sm;
+  color: $brand-500;
+}
+
+.categoryItem {
+  padding: $spacing-md 0;
+  border-bottom: 1px solid $border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.categoryTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.categoryLeft {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.catIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-sm;
+  background: $brand-50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-lg;
+}
+
+.catName {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+}
+
+.catAmount {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 600;
+}
+
+.catMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $spacing-xs;
+  font-size: $font-xs;
+  color: $text-tertiary;
+}
+
+.progressWrap {
+  height: 6px;
+  background: $bg-secondary;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: $spacing-sm 0;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.progressNormal {
+  background: $brand-500;
+}
+
+.progressWarning {
+  background: $warning-500;
+}
+
+.progressOver {
+  background: $danger-500;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 6px,
+    rgba(255, 255, 255, 0.3) 6px,
+    rgba(255, 255, 255, 0.3) 12px
+  );
+}
+
+.setBudgetBtn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.btn {
+  width: 100%;
+  padding: $spacing-md;
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  color: #fff;
+  border-radius: $radius-md;
+  text-align: center;
+  font-size: $font-base;
+  font-weight: 600;
+}

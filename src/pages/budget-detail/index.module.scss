@@ -1,0 +1,134 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 120px;
+}
+
+.totalCard {
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  margin: $spacing-md;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  color: #fff;
+}
+
+.totalLabel {
+  font-size: $font-sm;
+  opacity: 0.85;
+}
+
+.totalInput {
+  display: flex;
+  align-items: baseline;
+  margin-top: $spacing-sm;
+}
+
+.currency {
+  font-size: $font-xl;
+  font-weight: 600;
+  margin-right: $spacing-xs;
+}
+
+.totalAmount {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: $font-3xl;
+  font-weight: 700;
+  color: #fff;
+}
+
+.totalAmount::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.tip {
+  font-size: $font-xs;
+  opacity: 0.75;
+  margin-top: $spacing-sm;
+}
+
+.categorySection {
+  margin: $spacing-md;
+  background: #fff;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  @include card-shadow;
+}
+
+.sectionHeader {
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1px solid $border-light;
+  font-size: $font-sm;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.categoryRow {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1px solid $border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.catIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-md;
+  background: $brand-50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-lg;
+  margin-right: $spacing-md;
+}
+
+.catInfo {
+  flex: 1;
+}
+
+.catName {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+}
+
+.catInput {
+  font-size: $font-sm;
+  color: $text-primary;
+  text-align: right;
+  width: 120px;
+}
+
+.catInput::placeholder {
+  color: $text-placeholder;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.saveBtn {
+  width: 100%;
+  padding: $spacing-md;
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  color: #fff;
+  border-radius: $radius-md;
+  text-align: center;
+  font-size: $font-base;
+  font-weight: 600;
+}

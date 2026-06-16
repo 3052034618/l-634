@@ -1,0 +1,157 @@
+@import '@/styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-page;
+  padding-bottom: 120px;
+}
+
+.accountHeader {
+  background: linear-gradient(135deg, $brand-500, $brand-600);
+  padding: $spacing-2xl $spacing-lg $spacing-3xl;
+  color: #fff;
+}
+
+.accountInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.accountIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: $radius-lg;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-3xl;
+}
+
+.accountName {
+  font-size: $font-xl;
+  font-weight: 600;
+}
+
+.accountType {
+  font-size: $font-sm;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+
+.balanceRow {
+  margin-top: $spacing-xl;
+}
+
+.balanceLabel {
+  font-size: $font-sm;
+  opacity: 0.8;
+}
+
+.balanceValue {
+  font-size: $font-4xl;
+  font-weight: 700;
+  margin-top: $spacing-xs;
+}
+
+.content {
+  padding: $spacing-md;
+  margin-top: -$spacing-xl;
+}
+
+.infoCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-md;
+  overflow: hidden;
+  @include card-shadow;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1px solid $border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.infoLabel {
+  font-size: $font-sm;
+  color: $text-tertiary;
+  flex: 1;
+}
+
+.infoValue {
+  font-size: $font-sm;
+  color: $text-primary;
+  font-weight: 500;
+}
+
+.creditProgress {
+  padding: $spacing-lg;
+}
+
+.progressBar {
+  height: 8px;
+  background: $bg-secondary;
+  border-radius: 4px;
+  margin-top: $spacing-sm;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, $warning-500, $danger-500);
+  border-radius: 4px;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacing-sm;
+}
+
+.progressInfoText {
+  font-size: $font-xs;
+  color: $text-tertiary;
+}
+
+.txList {
+  margin-top: $spacing-md;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: #fff;
+  display: flex;
+  gap: $spacing-md;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.btn {
+  flex: 1;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  text-align: center;
+  font-size: $font-sm;
+  font-weight: 600;
+}
+
+.btnEdit {
+  background: $brand-50;
+  color: $brand-600;
+}
+
+.btnDelete {
+  background: $danger-50;
+  color: $danger-600;
+}

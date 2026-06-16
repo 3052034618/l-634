@@ -1,0 +1,42 @@
+// ============================================
+// 主题配色变量 - 个人理财APP
+// ============================================
+
+// 品牌主题色：翡翠绿（代表财富增长、积极可信赖）
+$color-primary: #10b981;
+$color-primary-light: #34d399;
+$color-primary-dark: #059669;
+
+// 业务色
+$color-income: #10b981;
+$color-expense: #ef4444;
+
+// 功能色
+$color-success: #10b981;
+$color-warning: #f59e0b;
+$color-error: #ef4444;
+$color-info: #6366f1;
+
+// 背景色
+$color-bg-page: #f8fafc;
+$color-bg-card: #ffffff;
+$color-bg-hover: #f1f5f9;
+$color-bg-primary-soft: rgba(16, 185, 129, 0.08);
+$color-bg-income-soft: rgba(16, 185, 129, 0.1);
+$color-bg-expense-soft: rgba(239, 68, 68, 0.1);
+$color-bg-warning-soft: rgba(245, 158, 11, 0.1);
+
+// 文本色
+$color-text-primary: #0f172a;
+$color-text-secondary: #475569;
+$color-text-tertiary: #94a3b8;
+$color-text-disabled: #cbd5e1;
+$color-text-white: #ffffff;
+
+// 边框色
+$color-border: #e2e8f0;
+$color-divider: #f1f5f9;
+
+// 渐变
+$gradient-primary: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+$gradient-header: linear-gradient(135deg, #059669 0%, #10b981 100%);

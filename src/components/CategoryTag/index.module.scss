@@ -1,0 +1,44 @@
+@use '@/styles/variables.scss' as *;
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+  margin-right: $spacing-sm;
+  margin-bottom: $spacing-sm;
+
+  &:active {
+    transform: scale(0.96);
+    opacity: 0.9;
+  }
+}
+
+.sm {
+  padding: $spacing-xs $spacing-sm;
+}
+
+.active {
+  border-style: solid;
+  border-width: 2rpx;
+}
+
+.icon {
+  font-size: 28rpx;
+  margin-right: $spacing-xs;
+}
+
+.sm .icon {
+  font-size: 24rpx;
+}
+
+.name {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.sm .name {
+  font-size: $font-size-xs;
+}
