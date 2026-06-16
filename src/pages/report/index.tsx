@@ -3,6 +3,7 @@ import { View, Text, ScrollView, useDidShow, showToast } from '@tarojs/taro'
 import dayjs from 'dayjs'
 import { useTransactionStore } from '@/store/transactionStore'
 import { useBudgetStore } from '@/store/budgetStore'
+import { useAccountStore } from '@/store/accountStore'
 import PieChart, { PieDataItem } from '@/components/PieChart'
 import LineChart, { LineDataPoint } from '@/components/LineChart'
 import SectionHeader from '@/components/SectionHeader'
@@ -74,20 +75,14 @@ const ReportPage: React.FC = () => {
     setCurrentMonth(next.format('YYYY-MM'))
   }
 
-  const handleExportCSV = () => {
+  const accounts = useAccountStore((s) => s.accounts)
+  const handleExportCSV = async () => {
     const data = useTransactionStore.getState().getMonthTransactions(currentMonth)
-    if (data.length === 0) {
-      showToast({ title: '暂无数据导出', icon: 'none' })
-      return
-    }
-    const filename = `交易明细_${currentMonth}.csv`
-    exportToCSV(data, filename)
-    showToast({ title: '导出成功', icon: 'success' })
+    await exportToCSV(data, accounts, `交易明细_${currentMonth}`)
   }
 
-  const handleExportReport = () => {
-    const result = exportSummaryToText(currentMonth, summary, budgetProgress)
-    showToast({ title: result ? '报告已生成' : '导出成功', icon: 'success' })
+  const handleExportReport = async () => {
+    await exportSummaryToText(currentMonth, summary, budgetProgress, accounts)
   }
 
   const getTrendClass = () => {

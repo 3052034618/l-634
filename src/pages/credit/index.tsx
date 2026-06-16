@@ -26,7 +26,13 @@ const CreditPage: React.FC = () => {
   useDidShow(() => {
     loadAccounts()
     loadCredit()
-    setTimeout(() => checkReminders(), 300)
+    setTimeout(() => {
+      const credits = accounts.filter((a) => a.type === 'credit')
+      if (credits.length > 0 && !selectedAccountId) {
+        setSelectedAccountId(credits[0].id)
+      }
+      checkReminders()
+    }, 300)
   })
 
   const creditAccounts = useMemo(
@@ -87,15 +93,32 @@ const CreditPage: React.FC = () => {
       return
     }
 
+    const account = accounts.find((a) => a.id === selectedAccountId)
+    if (!account) {
+      showToast({ title: '账户不存在', icon: 'none' })
+      return
+    }
+
     const result = parseBillText(selectedAccountId, parseText)
     if (result.items.length === 0) {
       showToast({ title: '未解析到有效数据', icon: 'none' })
       return
     }
 
-    const billingMonth = dayjs().format('YYYY-MM')
-    const billingDate = dayjs().format('YYYY-MM-DD')
-    const dueDate = dayjs().add(20, 'day').format('YYYY-MM-DD')
+    const now = dayjs()
+    const billingMonth = now.format('YYYY-MM')
+    const billingDate = now.format('YYYY-MM-DD')
+    
+    let dueDate: string
+    if (account.repaymentDay) {
+      if (now.date() > account.repaymentDay) {
+        dueDate = now.add(1, 'month').date(account.repaymentDay).format('YYYY-MM-DD')
+      } else {
+        dueDate = now.date(account.repaymentDay).format('YYYY-MM-DD')
+      }
+    } else {
+      dueDate = now.add(20, 'day').format('YYYY-MM-DD')
+    }
 
     const bill = createBill({
       accountId: selectedAccountId,
@@ -107,6 +130,11 @@ const CreditPage: React.FC = () => {
     })
 
     importBillItems(bill.id)
+    
+    setTimeout(() => {
+      checkReminders()
+    }, 200)
+    
     setParseText('')
     showToast({ title: `成功导入${result.items.length}条记录`, icon: 'success' })
   }

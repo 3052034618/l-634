@@ -169,3 +169,94 @@
   background: $danger-50;
   color: $danger-600;
 }
+
+.btnCancel {
+  background: $bg-secondary;
+  color: $text-secondary;
+}
+
+.btnSave {
+  background: $brand-500;
+  color: #fff;
+}
+
+.editAmountWrap {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-top: $spacing-sm;
+}
+
+.editAmountSign {
+  font-size: $font-2xl;
+  font-weight: 700;
+  margin-right: $spacing-xs;
+}
+
+.editAmountCurrency {
+  font-size: $font-2xl;
+  font-weight: 700;
+  margin-right: $spacing-xs;
+}
+
+.editAmountInput {
+  font-size: $font-4xl;
+  font-weight: 700;
+  color: #fff;
+  background: transparent;
+  min-width: 160px;
+  text-align: left;
+}
+
+.editTypeRow {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-lg 0;
+  border-bottom: 1px solid $border-light;
+}
+
+.editTypeBtn {
+  flex: 1;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  text-align: center;
+  font-size: $font-sm;
+  font-weight: 600;
+  background: $bg-secondary;
+  color: $text-secondary;
+  border: 2px solid transparent;
+}
+
+.editTypeExpense {
+  background: $danger-50;
+  color: $danger-600;
+  border-color: $danger-500;
+}
+
+.editTypeIncome {
+  background: $success-50;
+  color: $success-600;
+  border-color: $success-500;
+}
+
+.pickerValue {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: $font-sm;
+  color: $text-primary;
+  gap: $spacing-xs;
+}
+
+.pickerArrow {
+  color: $text-tertiary;
+  font-size: $font-lg;
+}
+
+.editInput {
+  flex: 1;
+  text-align: right;
+  font-size: $font-sm;
+  color: $text-primary;
+}

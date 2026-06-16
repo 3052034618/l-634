@@ -16,6 +16,7 @@ interface CreditState {
   reminders: CreditReminder[]
   loaded: boolean
   loadBills: () => void
+  loadCredit: () => void
   getBillsByAccount: (accountId: string) => CreditBill[]
   getCurrentBill: (accountId: string) => CreditBill | undefined
   createBill: (data: {
@@ -52,6 +53,10 @@ export const useCreditStore = create<CreditState>((set, get) => ({
       loaded: true
     })
     console.log('[CreditStore] Loaded', get().bills.length, 'bills')
+  },
+
+  loadCredit: () => {
+    get().loadBills()
   },
 
   getBillsByAccount: (accountId) =>
@@ -94,22 +99,29 @@ export const useCreditStore = create<CreditState>((set, get) => ({
     const lines = text.split(/[\n\r]+/)
     const items: CreditBillItem[] = []
     let totalAmount = 0
+    const categories = useAppStore.getState().categories
 
     lines.forEach((line) => {
+      if (!line.trim()) return
       const amountMatch = line.match(/(\d+\.?\d*)\s*(?:元|RMB|￥|¥)/)
       if (amountMatch) {
         const amount = parseFloat(amountMatch[1])
         if (amount > 0 && amount < 100000) {
           const desc = line.replace(amountMatch[0], '').trim() || '信用卡消费'
           const dateMatch = line.match(/(\d{4}[-\/]\d{1,2}[-\/]\d{1,2})/)
+          const merchantMatch = desc.match(/(?:消费于|交易|商户|收款方|支付给)\s*([^\s，。,]+)/)
+          const merchant = merchantMatch ? merchantMatch[1] : desc.substring(0, 20)
+          
+          const classification = classifyTransaction(desc, merchant, categories)
+          
           items.push({
             id: generateId(),
             date: dateMatch ? dateMatch[1].replace(/\//g, '-') : dayjs().format('YYYY-MM-DD'),
             description: desc.substring(0, 50),
-            merchant: desc.substring(0, 20),
+            merchant: merchant.substring(0, 20),
             amount,
-            categoryId: 'cat_other_expense',
-            categoryName: '其他',
+            categoryId: classification.categoryId,
+            categoryName: classification.categoryName,
             imported: false
           })
           totalAmount += amount

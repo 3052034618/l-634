@@ -8,6 +8,7 @@ import { classifyTransaction, learnClassification } from '@/utils/classifier'
 import { isSameMonth } from '@/utils/format'
 import { useAccountStore } from './accountStore'
 import { useAppStore } from './appStore'
+import { useBudgetStore } from './budgetStore'
 
 const TX_KEY = 'transactions'
 
@@ -101,6 +102,13 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     setStorageSync(TX_KEY, updated)
     set({ transactions: updated })
     console.log('[TransactionStore] Added transaction:', newTx.id)
+
+    if (data.type === 'expense') {
+      setTimeout(() => {
+        useBudgetStore.getState().checkBudgetAlerts()
+      }, 100)
+    }
+
     return newTx
   },
 
@@ -132,6 +140,13 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     )
     setStorageSync(TX_KEY, updated)
     set({ transactions: updated })
+
+    const finalType = data.type || tx.type
+    if (finalType === 'expense') {
+      setTimeout(() => {
+        useBudgetStore.getState().checkBudgetAlerts()
+      }, 100)
+    }
   },
 
   deleteTransaction: (id) => {
@@ -143,6 +158,12 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     const updated = get().transactions.filter((t) => t.id !== id)
     setStorageSync(TX_KEY, updated)
     set({ transactions: updated })
+
+    if (tx?.type === 'expense') {
+      setTimeout(() => {
+        useBudgetStore.getState().checkBudgetAlerts()
+      }, 100)
+    }
   },
 
   getTransactionById: (id) => get().transactions.find((t) => t.id === id),

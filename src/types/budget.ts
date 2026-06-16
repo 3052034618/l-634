@@ -10,6 +10,7 @@ export interface BudgetAlert {
   type: 'warning' | 'overdue'
   categoryId: string
   categoryName: string
+  month?: string
   message: string
   triggeredAt: string
   read: boolean

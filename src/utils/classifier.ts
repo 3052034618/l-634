@@ -6,6 +6,7 @@ interface LearnedPattern {
   categoryId: string
   categoryName: string
   count: number
+  lastUsed: number
 }
 
 const LEARNED_KEY = 'learned_patterns'
@@ -29,31 +30,52 @@ export const learnClassification = (
 
   tokens.forEach((token) => {
     if (token.length < 2) return
+    
+    const lowerToken = token.toLowerCase()
+    
     const existing = patterns.find(
-      (p) => p.keyword.toLowerCase() === token.toLowerCase() && p.categoryId === categoryId
+      (p) => p.keyword.toLowerCase() === lowerToken && p.categoryId === categoryId
     )
+    
     if (existing) {
       existing.count += 1
+      existing.lastUsed = Date.now()
     } else {
       patterns.push({
-        keyword: token.toLowerCase(),
+        keyword: lowerToken,
         categoryId,
         categoryName,
-        count: 1
+        count: 1,
+        lastUsed: Date.now()
       })
     }
   })
 
-  saveLearnedPatterns(patterns)
+  const sortedPatterns = patterns
+    .sort((a, b) => b.count - a.count || b.lastUsed - a.lastUsed)
+    .slice(0, 500)
+
+  saveLearnedPatterns(sortedPatterns)
 }
 
 const extractKeywords = (description: string, merchant?: string): string[] => {
   const text = `${description || ''} ${merchant || ''}`.trim()
   if (!text) return []
-  return text
+  
+  const tokens = text
     .split(/[\s,，.。!！?？、\/\\()（）\-_【】\[\]:：;；]+/)
     .filter((t) => t.length >= 2)
     .slice(0, 10)
+  
+  const ngrams: string[] = []
+  tokens.forEach((token) => {
+    if (token.length >= 4) {
+      ngrams.push(token.substring(0, 4))
+    }
+    ngrams.push(token)
+  })
+  
+  return [...new Set(ngrams)]
 }
 
 export const classifyTransaction = (
@@ -64,53 +86,64 @@ export const classifyTransaction = (
   const tokens = extractKeywords(description, merchant)
   const learned = loadLearnedPatterns()
 
-  let bestMatch: { categoryId: string; categoryName: string; score: number } | null = null
+  let bestMatch: { categoryId: string; categoryName: string; score: number; fromLearned: boolean } | null = null
 
   tokens.forEach((token) => {
     const lowerToken = token.toLowerCase()
 
-    const learnedMatch = learned
+    const learnedMatches = learned
       .filter((p) => lowerToken.includes(p.keyword) || p.keyword.includes(lowerToken))
-      .sort((a, b) => b.count - a.count)[0]
+      .sort((a, b) => b.count - a.count || b.lastUsed - a.lastUsed)
 
-    if (learnedMatch) {
-      const score = Math.min(learnedMatch.count * 0.3, 0.9)
+    if (learnedMatches.length > 0) {
+      const topMatch = learnedMatches[0]
+      const baseScore = 0.95
+      const countBonus = Math.min(topMatch.count * 0.02, 0.05)
+      const score = baseScore + countBonus
+      
       if (!bestMatch || score > bestMatch.score) {
         bestMatch = {
-          categoryId: learnedMatch.categoryId,
-          categoryName: learnedMatch.categoryName,
-          score
+          categoryId: topMatch.categoryId,
+          categoryName: topMatch.categoryName,
+          score,
+          fromLearned: true
         }
       }
     }
 
-    categories.forEach((cat) => {
-      cat.keywords.forEach((kw) => {
-        if (lowerToken.includes(kw.toLowerCase()) || kw.toLowerCase().includes(lowerToken)) {
-          const score = 0.85
-          if (!bestMatch || score > bestMatch.score) {
-            bestMatch = {
-              categoryId: cat.id,
-              categoryName: cat.name,
-              score
+    if (!bestMatch || !bestMatch.fromLearned) {
+      categories.forEach((cat) => {
+        cat.keywords.forEach((kw) => {
+          const lowerKw = kw.toLowerCase()
+          if (lowerToken.includes(lowerKw) || lowerKw.includes(lowerToken)) {
+            const score = 0.85
+            if (!bestMatch || score > bestMatch.score) {
+              bestMatch = {
+                categoryId: cat.id,
+                categoryName: cat.name,
+                score,
+                fromLearned: false
+              }
             }
           }
-        }
+        })
       })
-    })
+    }
   })
 
   if (bestMatch) {
     return {
       categoryId: bestMatch.categoryId,
       categoryName: bestMatch.categoryName,
-      confidence: bestMatch.score,
+      confidence: Math.min(bestMatch.score, 1.0),
       isAuto: true
     }
   }
 
-  const defaultExpense = categories.find((c) => c.type === 'expense' && c.name === '其他')
-  const defaultCategory = defaultExpense || categories.find((c) => c.type === 'expense')
+  const defaultCategory = categories.find((c) => c.type === 'expense' && c.name === '其他')
+    || categories.find((c) => c.type === 'expense' && c.name.toLowerCase().includes('其他'))
+    || categories.find((c) => c.type === 'expense')
+
   if (defaultCategory) {
     return {
       categoryId: defaultCategory.id,

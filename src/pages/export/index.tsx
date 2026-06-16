@@ -27,39 +27,26 @@ const ExportPage: React.FC = () => {
   const summary = useMemo(() => getMonthSummary(currentMonth), [currentMonth, getMonthSummary])
   const budgetProgress = useMemo(() => getTotalProgress(currentMonth), [currentMonth, getTotalProgress])
 
-  const handleExportCSV = () => {
-    if (transactions.length === 0) {
-      showToast({ title: '暂无交易数据', icon: 'none' })
-      return
-    }
-    const filename = `全部交易记录_${dayjs().format('YYYYMMDD')}.csv`
-    exportToCSV(transactions, filename)
-    showToast({ title: '导出成功', icon: 'success' })
+  const handleExportCSV = async () => {
+    await exportToCSV(transactions, accounts, `全部交易记录_${dayjs().format('YYYYMMDD')}`)
   }
 
-  const handleExportMonthCSV = () => {
+  const handleExportMonthCSV = async () => {
     const monthTx = transactions.filter((t) => t.date.startsWith(currentMonth))
-    if (monthTx.length === 0) {
-      showToast({ title: '本月暂无交易', icon: 'none' })
-      return
-    }
-    const filename = `${currentMonth}交易明细.csv`
-    exportToCSV(monthTx, filename)
-    showToast({ title: '导出成功', icon: 'success' })
+    await exportToCSV(monthTx, accounts, `${currentMonth}交易明细`)
   }
 
-  const handleExportReport = () => {
-    const result = exportSummaryToText(currentMonth, summary, budgetProgress)
-    showToast({ title: '报告已生成', icon: 'success' })
+  const handleExportReport = async () => {
+    await exportSummaryToText(currentMonth, summary, budgetProgress, accounts)
   }
 
-  const handleExportAll = () => {
+  const handleExportAll = async () => {
     if (transactions.length === 0) {
       showToast({ title: '暂无数据', icon: 'none' })
       return
     }
-    handleExportCSV()
-    handleExportReport()
+    await handleExportCSV()
+    setTimeout(() => handleExportReport(), 1000)
   }
 
   return (
